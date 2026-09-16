@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+    html { color-scheme: light; }
+    body { margin: 0; font: 14px system-ui, -apple-system, sans-serif; background: #fafaf9; }
+    img { max-width: 100%; }
+    [hidden] { display: none !important; }
+</style>
+<title>2단계 제조 응용 AI 스터디</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=Noto+Serif+KR:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+<header class="masthead">
+  <div class="wrap">
+    <p class="crumbs"><a href="index.html">제조AI 부트캠프 스터디</a> › 2단계 · 제조 응용 AI</p>
+    <div class="eyebrow">
+      <span>2단계 · 2026-10-20 ~ 11-26 · 6주 12회차</span>
+      <span class="dim">준비 페이지 — 회차 노트가 쌓이면 갱신 <span class="pill spike">준비</span></span>
+    </div>
+    <h1>2단계 제조 응용 AI — 준비</h1>
+    <p class="standfirst">
+      포스터가 말하는 2단계 범위는 셋이다 — <strong>제조AI 태스크</strong>(품질관리·설비관리·이상탐지), <strong>제조 데이터 처리</strong>(시계열·이미지), <strong>미니 프로젝트</strong>.
+      회차별 과목은 아직 공개되지 않았지만(2026-09-11 확인), 이 세 범위는 확정이다.
+      이 페이지는 그 셋을 1단계 실습과 이어서 미리 읽어 두는 입문서이고, 미니 프로젝트 주제를 2단계 첫 주 안에 잡기 위한 후보와 공개 데이터셋을 모아 두었다.
+    </p>
+    <div class="meta">
+      <span><strong>앞 단계</strong> <a href="stage-1-basics.html">1단계 기초 AI</a></span>
+      <span><strong>메인 문서</strong> <a href="index.html">일정 · 루틴 · 자료 지도</a></span>
+      <span class="dim">갱신 2026-09-13</span>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+<main>
+
+<details class="toc" open>
+  <summary>이 페이지의 차례</summary>
+  <div class="toc-body">
+    <div class="grp">시작</div>
+    <a href="#how"><span class="num">0</span>이 페이지로 준비하는 법 · 진행 체크</a>
+    <div class="grp">1부 · 개념</div>
+    <a href="#tasks"><span class="num">1.1</span>제조AI 태스크 세 가지 — 한 표로</a>
+    <a href="#ts"><span class="num">1.2</span>시계열 데이터 처리 — 창·특징·누수</a>
+    <a href="#img"><span class="num">1.3</span>이미지 데이터 처리 — CNN과 사전학습 모델</a>
+    <a href="#ad"><span class="num">1.4</span>비지도 이상탐지 — 정상만 배운다</a>
+    <a href="#eval"><span class="num">1.5</span>평가 — 1단계 실습 4를 그대로 쓴다</a>
+    <a href="#bridge"><span class="num">1.6</span>1단계 실습이 2단계에서 어떻게 쓰이나</a>
+    <div class="grp">2부 · 미니 프로젝트</div>
+    <a href="#datasets"><span class="num">2.1</span>공개 데이터셋 — 사내 데이터는 쓰지 않는다</a>
+    <a href="#project"><span class="num">2.2</span>주제 후보와 원칙</a>
+    <a href="#deliverable"><span class="num">2.3</span>산출물 형식을 먼저 정한다</a>
+    <div class="grp">3부</div>
+    <a href="#firstday"><span class="num">3</span>10-20 첫 회차에 확인할 것</a>
+    <a href="#notes"><span class="num">4</span>회차 노트 (개강 후)</a>
+  </div>
+</details>
+
+<h2 id="how"><span class="num">0</span>이 페이지로 준비하는 법</h2>
+<ol class="path">
+  <li><div class="what"><b>1부 개념을 한 번 읽는다 — 태스크 → 시계열 → 이미지 → 이상탐지 → 평가</b><div class="where">1단계 실습에서 본 것(이동통계·라벨 만들기·혼동행렬)이 어디로 이어지는지만 잡으면 된다</div></div><span class="t">1시간</span></li>
+  <li><div class="what"><b>2.1 공개 데이터셋 중 하나를 내려받아 훑어본다</b><div class="where">1단계 실습 2의 6단계(read_csv → describe → 결측 → resample → merge → rolling)를 그대로 돌려 본다</div></div><span class="t">1시간</span></li>
+  <li><div class="what"><b>2.2 후보 중 하나를 골라 문제 정의 한 문단을 써 둔다</b><div class="where">10-20 첫 회차에 규칙(팀/데이터/평가)을 확인하자마자 확정할 수 있게</div></div><span class="t">30분</span></li>
+</ol>
+<h3>진행 체크</h3>
+<p class="col">이 브라우저에만 저장된다(서버 없음).</p>
+<ul class="checks">
+  <li><label><input type="checkbox" id="k-concept"><span>1부 개념 1.1 ~ 1.6</span></label></li>
+  <li><label><input type="checkbox" id="k-data"><span>공개 데이터셋 하나 내려받아 describe()까지</span></label></li>
+  <li><label><input type="checkbox" id="k-topic"><span>미니 프로젝트 문제 정의 한 문단</span></label></li>
+  <li><label><input type="checkbox" id="k-rules"><span>10-20 첫 회차에서 규칙 4가지 확인</span></label></li>
+</ul>
+
+<div class="part">1부 · 개념</div>
+
+<h2 id="tasks"><span class="num">1.1</span>제조AI 태스크 세 가지 — 한 표로</h2>
+<p class="col">포스터의 세 태스크는 머신러닝 문제 유형으로 번역하면 서로 다른 문제다. 어떤 데이터가 있고 어떤 라벨이 있느냐가 유형을 정한다.</p>
+<div class="tbl">
+<table>
+<thead><tr><th>제조 태스크</th><th>ML 문제 유형</th><th>입력</th><th>라벨(정답)</th><th>대표 모델</th><th>평가</th></tr></thead>
+<tbody>
+<tr><td><strong>품질관리</strong> — 양·불 판정, 외관 불량 검출</td><td>분류 (지도) · 이미지면 비전 분류/분할</td><td>공정 파라미터 표, 제품 이미지</td><td>양품/불량 (검사 결과에서 온다)</td><td>로지스틱 회귀·트리 앙상블 · CNN</td><td>혼동행렬, 정밀도·재현율, PR-AUC</td></tr>
+<tr><td><strong>설비관리</strong> — 예지보전, 잔여수명(RUL)</td><td>분류("N시간 안에 고장?") 또는 회귀(남은 시간)</td><td>센서 시계열 + 고장 이력</td><td>고장 시각에서 거꾸로 만든다 (1단계 실습 2)</td><td>rolling 특징 + 앙상블 · 시계열 신경망</td><td>분류면 PR, 회귀면 RMSE/MAE</td></tr>
+<tr><td><strong>이상탐지</strong> — 평소와 다른 구간 찾기</td><td><strong>비지도</strong>가 기본 (라벨이 거의 없다)</td><td>센서 시계열, 이미지</td><td>없거나 극소수. 정상 구간만 안다</td><td>통계 임계값 · 오토인코더 재구성 오차 · 거리 기반</td><td>정상/이상 라벨이 조금이라도 있으면 PR. 구간 단위로 센다</td></tr>
+</tbody>
+<caption>셋 다 "찾아야 할 쪽이 드물다"는 공통점이 있다. 그래서 정확도가 아니라 정밀도·재현율로 본다 (1.5절).</caption>
+</table>
+</div>
+<div class="box key"><span class="h">먼저 물어야 할 질문 하나</span>
+  "라벨이 있는가, 얼마나 있는가." 불량 이력이 수천 건이면 지도 분류, 수십 건이면 비지도 이상탐지 + 소수 라벨로 검증, 없으면 통계 임계값부터.
+  모델 선택은 이 답 다음이다.
+</div>
+
+<h2 id="ts"><span class="num">1.2</span>시계열 데이터 처리 — 창·특징·누수</h2>
+<p class="col">설비 센서는 1초에 수십 번 값을 뱉지만, 모델은 "지금 상태"를 나타내는 벡터 하나를 원한다. 그 사이를 잇는 것이 <strong>창(window)</strong>이다.</p>
+<div class="terms">
+  <div><b>창과 보폭</b>최근 W개 샘플을 한 묶음으로 보고, S개씩 밀며 다음 묶음을 만든다. W가 길면 안정적이지만 검출이 늦다 — 1단계 실습 1의 "5초 창 = 지연 vs 안정성"이 그것.</div>
+  <div><b>창 특징(feature)</b>창마다 평균·표준편차·최댓값·RMS·기울기·주파수 성분(FFT 피크). 1단계 실습 1의 이동평균·이동표준편차, 실습 2의 rolling 평균·기울기가 이 특징들의 원형이다.</div>
+  <div><b>정규화는 정상 구간 기준으로</b>정상 구간의 평균·표준편차로 표준화한다. 전체 데이터로 하면 이상 구간이 기준을 흔든다.</div>
+  <div><b>누수(leakage)</b>고장 <em>이후</em> 데이터나 미래 값이 특징에 섞이면 점수가 헛되게 오른다. 분할은 무작위가 아니라 <strong>시간순</strong>으로 — 앞 70%로 학습, 뒤 30%로 평가.</div>
+  <div><b>설비별로 따로</b>설비마다 기준선이 다르다. groupby(설비) 없이 ffill·rolling을 하면 다른 설비 값이 넘어온다 (실습 2의 함정).</div>
+  <div><b>시계열 신경망</b>창을 그대로 넣는 1D-CNN, 순서를 기억하는 GRU/LSTM, 최근의 트랜스포머 계열. 부트캠프에서는 창 특징 + 트리 앙상블이 먼저 나올 가능성이 높다 — 강력하고 설명하기 쉽다.</div>
+</div>
+
+<h2 id="img"><span class="num">1.3</span>이미지 데이터 처리 — CNN과 사전학습 모델</h2>
+<div class="terms">
+  <div><b>이미지는 (높이, 너비, 채널) 배열</b>1단계 실습 1의 (시간, 채널)과 같은 사고. PyTorch는 (배치, 채널, 높이, 너비) 순서를 쓴다 — shape 오류의 단골.</div>
+  <div><b>합성곱(convolution)</b>작은 필터를 이미지 위로 밀며 국소 패턴(모서리·긁힘·얼룩)을 잡는다. 이동통계가 시간축의 창이라면, 합성곱은 공간축의 창이다.</div>
+  <div><b>사전학습 모델 전이(transfer)</b>ImageNet으로 학습된 ResNet 같은 모델의 앞부분을 그대로 쓰고 마지막 층만 불량 분류로 바꿔 학습한다. 제조 데이터는 적어서 처음부터 학습하면 과적합한다.</div>
+  <div><b>증강(augmentation)</b>회전·뒤집기·밝기 변화로 데이터를 불린다. 단, 방향이 의미 있는 부품(위아래가 정해진)은 뒤집기가 오라벨을 만든다.</div>
+  <div><b>불량은 드물고 다양하다</b>양품 이미지는 많고 불량은 적고 종류도 제각각. 그래서 이미지 이상탐지(MVTec AD 계열)는 정상만 배우고 "정상과 다름"을 잰다 (1.4절).</div>
+  <div><b>평가</b>이미지 단위 분류(양/불)와 픽셀 단위 위치(어디가 불량인가)를 구분한다. 현장에서 필요한 것은 대개 후자다.</div>
+</div>
+
+<h2 id="ad"><span class="num">1.4</span>비지도 이상탐지 — 정상만 배운다</h2>
+<p class="col">이상탐지의 핵심 발상은 하나다. <strong>"정상이 무엇인지"를 배우고, 거기서 얼마나 벗어났는지를 점수로 낸다.</strong> 이상의 종류를 미리 알 필요가 없다.</p>
+<div class="tbl">
+<table>
+<thead><tr><th>방법</th><th>"정상"을 어떻게 배우나</th><th>이상 점수</th><th>언제 쓰나</th></tr></thead>
+<tbody>
+<tr><td>통계 임계값 (3-시그마)</td><td>정상 구간의 평균·표준편차</td><td>|x − μ| / σ</td><td>채널 하나, 분포가 안정적일 때. 1단계 실습 1이 이것</td></tr>
+<tr><td>거리·밀도 기반 (kNN, LOF, Isolation Forest)</td><td>정상 특징 벡터들의 분포</td><td>이웃까지의 거리, 고립되는 정도</td><td>창 특징이 수십 차원일 때. 라이브러리 한 줄</td></tr>
+<tr><td>오토인코더 (재구성 오차)</td><td>정상 데이터를 압축했다 복원하도록 학습</td><td>입력과 복원의 차이 (MSE)</td><td>시계열 창, 이미지. 정상은 잘 복원되고 이상은 못 한다</td></tr>
+<tr><td>예측 오차</td><td>다음 값을 예측하는 모델을 정상 데이터로 학습</td><td>예측과 실제의 차이</td><td>시계열. 전조가 "패턴의 붕괴"로 나타날 때</td></tr>
+<tr><td>사전학습 특징 + 거리 (PatchCore 계열)</td><td>사전학습 CNN 특징으로 정상 이미지 패치 저장</td><td>가장 가까운 정상 패치까지의 거리</td><td>이미지 외관 불량. MVTec AD에서 표준</td></tr>
+</tbody>
+<caption>어느 방법이든 마지막에는 <strong>임계값</strong>을 정해야 한다. 그 임계값은 1단계 실습 4처럼 미검·과검 비용으로 정한다.</caption>
+</table>
+</div>
+<div class="box warn"><span class="h">흔한 함정</span>
+  정상 데이터에 이상이 섞여 있으면(라벨이 없으니 모른다) 모델이 그것까지 "정상"으로 배운다. 학습용 정상 구간은 현장 확인을 거친 기간으로 잡는다.
+  그리고 계절·교대·원료 로트에 따라 정상 분포가 바뀐다 — 고정 임계값이 몇 주 뒤 오경보를 쏟아내는 이유다.
+</div>
+
+<h2 id="eval"><span class="num">1.5</span>평가 — 1단계 실습 4를 그대로 쓴다</h2>
+<ul>
+  <li><strong>정확도는 쓰지 않는다.</strong> 불량률 2%면 "전부 양품"이 98%다.</li>
+  <li><strong>혼동행렬 네 칸에 현장 용어를 붙인다.</strong> FN = 미검(불량을 흘려보냄), FP = 과검(멀쩡한 것을 잡아 세움).</li>
+  <li><strong>임계값은 비용으로 정한다.</strong> 미검 비용과 과검 비용을 넣고 총비용이 최소인 지점. 현업과 합의할 것은 모델이 아니라 이 비용표다.</li>
+  <li><strong>ROC-AUC보다 PR-AUC.</strong> 불균형에서 ROC는 후하게 나온다.</li>
+  <li><strong>시계열은 구간 단위로 센다.</strong> 고장 하나를 샘플 300개로 세면 지표가 왜곡된다. "고장 구간을 몇 개 잡았나, 얼마나 일찍 잡았나(리드타임)"로 본다.</li>
+</ul>
+
+<h2 id="bridge"><span class="num">1.6</span>1단계 실습이 2단계에서 어떻게 쓰이나</h2>
+<div class="tbl">
+<table>
+<thead><tr><th>1단계 실습</th><th>거기서 만든 것</th><th>2단계에서</th></tr></thead>
+<tbody>
+<tr><td><a href="stage-1-basics.html#lab1">실습 1</a> NumPy 센서</td><td>이동평균·이동표준편차, 3-시그마 경보, 오경보</td><td>시계열 창 특징의 원형. 이상탐지의 기준선(baseline)</td></tr>
+<tr><td><a href="stage-1-basics.html#lab2">실습 2</a> Pandas 설비 로그</td><td>결측 두 종류, resample, merge로 라벨, rolling 기울기</td><td>예지보전 데이터셋을 만드는 6단계 그대로. 누수 주의</td></tr>
+<tr><td><a href="stage-1-basics.html#lab3">실습 3</a> 회귀</td><td>손실·경사하강법·스케일링·과적합</td><td>잔여수명(RUL) 회귀, 그리고 모든 신경망 학습의 뼈대</td></tr>
+<tr><td><a href="stage-1-basics.html#lab4">실습 4</a> 불균형 분류</td><td>혼동행렬, 비용 기반 임계값, class_weight, PR</td><td>품질관리·이상탐지 평가 전부</td></tr>
+<tr><td><a href="stage-1-basics.html#lab5">실습 5</a> PyTorch</td><td>autograd, 다섯 줄 관용구, DataLoader, 선형 vs MLP</td><td>CNN·오토인코더·시계열 모델 — 모델 정의만 바뀌고 루프는 같다</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="part">2부 · 미니 프로젝트</div>
+
+<h2 id="datasets"><span class="num">2.1</span>공개 데이터셋 — 사내 데이터는 쓰지 않는다</h2>
+<p class="col">전부 무료로 내려받을 수 있고 논문·튜토리얼이 많다. 링크 확인 2026-09-13.</p>
+<div class="tbl">
+<table>
+<thead><tr><th>데이터셋</th><th>무엇</th><th>태스크</th><th>크기·형식</th></tr></thead>
+<tbody>
+<tr><td><a href="https://archive.ics.uci.edu/dataset/601/ai4i+2020+predictive+maintenance+dataset">AI4I 2020 Predictive Maintenance</a> (UCI)</td><td>합성 공정 데이터 — 온도·회전수·토크·공구 마모 + 고장 유형 5종</td><td>설비관리 (분류), 불균형</td><td>10,000행 CSV. 가장 가볍게 시작</td></tr>
+<tr><td><a href="https://engineering.case.edu/bearingdatacenter">CWRU Bearing Data</a></td><td>베어링 진동 신호 — 정상/내륜·외륜·볼 결함, 결함 크기별</td><td>이상탐지·결함 분류 (시계열 원신호)</td><td>.mat 파일, 12k/48k Hz</td></tr>
+<tr><td><a href="https://www.nasa.gov/intelligent-systems-division/discovery-and-systems-health/pcoe/pcoe-data-set-repository/">NASA PCoE 저장소</a> — IMS Bearing, Turbofan(C-MAPSS)</td><td>베어링 수명 종료까지의 진동 / 터보팬 엔진 열화 시뮬레이션</td><td>잔여수명(RUL) 회귀, 전조 탐지</td><td>텍스트 파일 다수. RUL의 표준 벤치마크</td></tr>
+<tr><td><a href="https://archive.ics.uci.edu/dataset/179/secom">SECOM</a> (UCI)</td><td>반도체 공정 센서 590개 + 양/불</td><td>품질관리 (분류), 결측 많음</td><td>1,567행. 결측·불균형 처리 연습에 최적</td></tr>
+<tr><td><a href="https://www.mvtec.com/company/research/datasets/mvtec-ad">MVTec AD</a></td><td>산업 부품·재질 15종의 외관 이미지 — 정상 학습, 결함 평가, 픽셀 마스크</td><td>이미지 이상탐지 (비지도)</td><td>약 5,000장. 비상업 연구용 라이선스 확인</td></tr>
+</tbody>
+<caption>원칙: 가져오는 것은 데이터가 아니라 <strong>문제 정의</strong>다. 현장 데이터의 특성(샘플링 주기·결측 양상·라벨 희소성)을 공개 데이터셋에서 흉내 내는 것이 미니 프로젝트의 설계다.</caption>
+</table>
+</div>
+
+<h2 id="project"><span class="num">2.2</span>주제 후보와 원칙</h2>
+<div class="tbl">
+<table>
+<thead><tr><th>#</th><th>주제</th><th>데이터</th><th>태스크</th><th>왜</th></tr></thead>
+<tbody>
+<tr class="hi"><td class="n">1</td><td><strong>설비 센서 시계열 이상탐지 / 예지보전</strong></td><td>AI4I 2020 → CWRU 또는 NASA IMS</td><td>설비관리·이상탐지</td><td>1단계 실습 1·2·4가 그대로 이어진다. 발전·정유·화학 설비로 확장되는 서사. 강사진의 시계열 연구와 접점</td></tr>
+<tr><td class="n">2</td><td>비전 기반 외관 불량 검출</td><td>MVTec AD</td><td>품질관리</td><td>이미지 파트가 커리큘럼에 있다. 자재·부품 검수로 확장</td></tr>
+<tr><td class="n">3</td><td>(부트캠프 중 발견한 문제로 교체)</td><td>—</td><td>—</td><td>2단계 회차에서 나온 문제가 더 좋으면 바꾼다</td></tr>
+</tbody>
+</table>
+</div>
+<div class="box key"><span class="h">주제 원칙 세 가지</span>
+  ① <strong>사내 데이터는 쓰지 않는다.</strong> 반출 불가를 전제로 공개 데이터셋만. 현장에서 가져오는 것은 문제 정의다.
+  ② 강의에서 다룬 방법 하나와 <strong>기준선(baseline) 하나</strong>를 반드시 비교한다 — 3-시그마 임계값이나 로지스틱 회귀보다 나은가.
+  ③ 현장으로 확장되는 서사를 한 문단 쓴다 — 이 모델이 어떤 설비·어떤 라인에 들어가면 무엇이 달라지는가.
+</div>
+
+<h2 id="deliverable"><span class="num">2.3</span>산출물 형식을 먼저 정한다</h2>
+<ol class="path">
+  <li><div class="what"><b>코드 저장소</b><div class="where">데이터 다운로드 스크립트 · 전처리 · 학습 · 평가가 각각 파일 하나. <code>README</code>에 재현 명령 한 줄</div></div></li>
+  <li><div class="what"><b>1페이지 요약</b><div class="where">문제 정의 · 데이터 · 방법 · 기준선 대비 결과(혼동행렬 또는 RMSE) · 한계 · 현장 확장</div></div></li>
+  <li><div class="what"><b>재현 명령 한 줄</b><div class="where"><code>python3 run.py</code> 로 표와 그림이 다시 나와야 한다. 1단계 실습이 이 형식이다</div></div></li>
+  <li><div class="what"><b>발표 자료는 그다음</b><div class="where">위 셋이 있으면 슬라이드는 한 시간이면 나온다. 반대 순서로 하면 코드가 없는 발표가 된다</div></div></li>
+</ol>
+
+<div class="part">3부</div>
+
+<h2 id="firstday"><span class="num">3</span>10-20 첫 회차에 확인할 것</h2>
+<ol>
+  <li>미니 프로젝트 — 개인인가 팀인가, 데이터를 제공하는가, 평가 기준은 무엇인가, 발표는 언제인가(11-26 예상, 미확인)</li>
+  <li>2단계 회차별 과목 순서 — 시계열이 먼저인가 이미지가 먼저인가</li>
+  <li>실습 환경 — 로컬인가 코랩인가, GPU가 필요한가</li>
+  <li>퀴즈 — 형식·빈도·배점</li>
+</ol>
+<p class="col">확인한 답은 <a href="index.html#facts">메인 문서 1절</a>의 미확인 줄을 지우며 채운다.</p>
+
+<h2 id="notes"><span class="num">4</span>회차 노트 (개강 후)</h2>
+<p class="col">회차 9~20의 노트가 쌓이면 여기에 회차별로 붙는다 — 핵심 개념 3~5개, 실습 기록, 퀴즈 대비, 질문. 양식은 <a href="index.html#note">메인 문서 7절</a>.</p>
+<div class="box"><span class="h">2026-09-13 현재</span>아직 없음. 2단계는 10-20에 시작한다.</div>
+
+<div class="nextprev">
+  <a href="stage-1-basics.html"><small>앞 단계</small>← 1단계 기초 AI</a>
+  <a href="index.html"><small>메인 문서</small>제조AI 부트캠프 스터디</a>
+</div>
+
+<footer>
+  개념 설명은 일반적인 머신러닝 교재 수준의 내용이며 부트캠프 강의 내용과 다를 수 있다 — 강의가 시작되면 강의를 우선한다.
+  데이터셋 링크 확인 2026-09-13. 갱신 2026-09-13.
+</footer>
+</main>
+</div>
+
+<script>
+(function () {
+  var key = 'mfg-ai-bootcamp:' + location.pathname;
+  var boxes = document.querySelectorAll('.checks input[type=checkbox]');
+  var saved = {};
+  try { saved = JSON.parse(localStorage.getItem(key) || '{}') || {}; } catch (e) { saved = {}; }
+  Array.prototype.forEach.call(boxes, function (b) {
+    if (saved[b.id]) b.checked = true;
+    b.addEventListener('change', function () {
+      saved[b.id] = b.checked;
+      try { localStorage.setItem(key, JSON.stringify(saved)); } catch (e) {}
+    });
+  });
+})();
+</script>
+</body>
+</html>

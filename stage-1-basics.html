@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+    html { color-scheme: light; }
+    body { margin: 0; font: 14px system-ui, -apple-system, sans-serif; background: #fafaf9; }
+    img { max-width: 100%; }
+    [hidden] { display: none !important; }
+</style>
+<title>1단계 기초 AI 스터디</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=Noto+Serif+KR:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+<header class="masthead">
+  <div class="wrap">
+    <p class="crumbs"><a href="index.html">제조AI 부트캠프 스터디</a> › 1단계 · 기초 AI</p>
+    <div class="eyebrow">
+      <span>1단계 · 2026-09-15 ~ 10-15 · 4주 8회차</span>
+      <span class="dim">개념 2시간 + 실습 4시간 + 자가 점검 30분</span>
+    </div>
+    <h1>1단계 기초 AI — 개념 13개와 실습 5종</h1>
+    <p class="standfirst">
+      포스터가 말하는 1단계 범위는 <strong>머신러닝·딥러닝 핵심 개념</strong>(회귀·분류·앙상블·신경망 기초)과
+      <strong>Python 데이터 분석·모델링 실습</strong>(NumPy·Pandas·PyTorch)이다. 회차별 과목은 아직 공개되지 않았지만(2026-09-11 확인),
+      앞부분에 올 수밖에 없는 개념 13개를 표로 정리하고, 그것을 제조 상황(설비 센서·사출성형·불량 판정)의 합성 데이터로 만져 보는 실습 5종을 붙였다.
+      전부 다운로드 없이 1분 안에 돈다. 실습 결과 수치는 스크립트를 실제로 돌려 나온 값이다.
+    </p>
+    <div class="links">
+      <a class="ext" href="https://github.com/drum-grammer/mfg-ai-bootcamp/tree/main/labs">실습 코드 (GitHub, 공개)</a>
+      <a class="ext" href="https://colab.research.google.com/github/drum-grammer/mfg-ai-bootcamp/blob/main/labs/notebooks/setup_check.ipynb">코랩에서 환경 점검부터</a>
+      <a class="ext" href="https://tangy-soarer-2d3.notion.site/KAIST-AI-2-3bcd9192df1180398498f3eba708423d">과정 공식 안내 (노션)</a>
+    </div>
+    <div class="meta">
+      <span><strong>다음 단계</strong> <a href="stage-2-applied.html">2단계 제조 응용 AI</a></span>
+      <span><strong>메인 문서</strong> <a href="index.html">일정 · 루틴 · 자료 지도</a></span>
+      <span class="dim">갱신 2026-09-13</span>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+<main>
+
+<details class="toc" open>
+  <summary>이 페이지의 차례</summary>
+  <div class="toc-body">
+    <div class="grp">시작</div>
+    <a href="#how"><span class="num">0</span>이 페이지로 공부하는 법 · 진행 체크</a>
+    <a href="#env"><span class="num">E</span>환경 설치 (30분) — 개강 당일에 하지 않는다</a>
+    <div class="grp">1부 · 개념 13개</div>
+    <a href="#c-data"><span class="num">1.1</span>데이터 — 특징·라벨, 지도·비지도, 표준화, 분할</a>
+    <a href="#c-reg"><span class="num">1.2</span>회귀 — 손실, 경사하강법·학습률, 과적합</a>
+    <a href="#c-cls"><span class="num">1.3</span>분류와 평가 — 혼동행렬, 불균형</a>
+    <a href="#c-dl"><span class="num">1.4</span>신경망 — 텐서·autograd, 에폭·배치, 은닉층·활성함수</a>
+    <div class="grp">2부 · 실습 5종</div>
+    <a href="#lab1"><span class="num">2.1</span>NumPy — 센서 3채널, 이동통계로 고장 잡기</a>
+    <a href="#lab2"><span class="num">2.2</span>Pandas — 설비 로그를 라벨 붙은 표로</a>
+    <a href="#lab3"><span class="num">2.3</span>회귀를 손으로 — 사출성형 치수</a>
+    <a href="#lab4"><span class="num">2.4</span>불균형 분류 — 불량률 2%</a>
+    <a href="#lab5"><span class="num">2.5</span>PyTorch — 다섯 줄 관용구</a>
+    <a href="#labmap"><span class="num">2.6</span>실습 ↔ 개념 지도</a>
+    <div class="grp">3부 · 점검</div>
+    <a href="#quiz"><span class="num">3.1</span>자가 점검 10문항</a>
+    <a href="#firstday"><span class="num">3.2</span>개강 당일 체크 · 첫 회차에 확인할 것</a>
+    <a href="#notes"><span class="num">3.3</span>회차 노트 (개강 후)</a>
+  </div>
+</details>
+
+<h2 id="how"><span class="num">0</span>이 페이지로 공부하는 법</h2>
+<p class="col">1부 표의 오른쪽 열("제조에서 왜")을 먼저 보고, 감이 안 오는 줄만 대응 실습으로 확인하면 된다. 전부 읽을 필요는 없다.
+시간이 없으면 <strong>실습 2와 4</strong>만 — 2단계 제조 응용에서 가장 많이 쓰는 둘이다.</p>
+<ol class="path">
+  <li><div class="what"><b>환경 설치와 점검</b><div class="where">아래 E절. 마지막 줄이 "환경 준비 완료"면 실습 5종이 전부 돈다</div></div><span class="t">30분</span></li>
+  <li><div class="what"><b>1부 개념 13개 — 표를 훑고 모르는 줄에 표시</b><div class="where">각 줄에 한 줄 정의 · 제조에서 왜 · 대응 실습이 있다</div></div><span class="t">2시간</span></li>
+  <li><div class="what"><b>2부 실습 1 → 5 순서대로</b><div class="where">1~2가 데이터, 3~4가 모델과 평가, 5가 도구. 명령 한 줄, 실제 출력, 그림, 해 볼 것</div></div><span class="t">4시간</span></li>
+  <li><div class="what"><b>3부 자가 점검 10문항</b><div class="where">막히는 번호가 곧 1주차에 물어볼 질문이다. 회차 노트의 질문 절에 옮긴다</div></div><span class="t">30분</span></li>
+</ol>
+<h3>진행 체크</h3>
+<p class="col">이 브라우저에만 저장된다(서버 없음).</p>
+<ul class="checks">
+  <li><label><input type="checkbox" id="k-env"><span>환경 점검 통과 ("환경 준비 완료")</span></label></li>
+  <li><label><input type="checkbox" id="k-concept"><span>개념 13개 표 훑기</span></label></li>
+  <li><label><input type="checkbox" id="k-lab12"><span>실습 1·2 (NumPy · Pandas)</span></label></li>
+  <li><label><input type="checkbox" id="k-lab34"><span>실습 3·4 (회귀 · 불균형 분류)</span></label></li>
+  <li><label><input type="checkbox" id="k-lab5"><span>실습 5 (PyTorch)</span></label></li>
+  <li><label><input type="checkbox" id="k-quiz"><span>자가 점검 10문항 중 8개 이상</span></label></li>
+  <li><label><input type="checkbox" id="k-day1"><span>개강 당일 체크 완료</span></label></li>
+</ul>
+
+<h2 id="env"><span class="num">E</span>환경 설치 (30분) — 개강 당일에 하지 않는다</h2>
+<p class="col">파이썬은 <strong>3.10 ~ 3.12</strong>를 권한다. 3.13 이상은 PyTorch 휠이 없을 수 있다. 강의가 구글 코랩을 쓸 수도 있지만, 로컬 환경이 있으면 VOD 복습 때 인터넷 없이 코드를 돌릴 수 있다. 둘 다 준비해 두는 쪽이 낫다.</p>
+<pre class="code"><span class="c"># 가상환경 + 패키지 (macOS / Linux. Windows는 venv\Scripts\activate)</span>
+python3.12 -m venv ~/venv/mfgai && source ~/venv/mfgai/bin/activate
+pip install -U pip numpy pandas matplotlib scikit-learn torch jupyterlab
+
+<span class="c"># 실습 코드 받기</span>
+git clone https://github.com/drum-grammer/mfg-ai-bootcamp
+cd mfg-ai-bootcamp/labs
+
+<span class="c"># 점검 — 없는 패키지를 찾아 설치 명령까지 찍어 준다</span>
+python3 setup_check.py</pre>
+<pre class="code"><span class="c"># 통과하면 이렇게 끝난다 (2026-09-13, macOS arm64, Python 3.12.13)</span>
+== 2) 패키지 ==
+  [O] numpy        2.5.3      배열·선형대수 — 모든 실습의 바닥
+  [O] pandas       3.0.5      표 형태 설비 로그·센서 데이터
+  [O] matplotlib   3.11.2     그래프
+  [O] sklearn      1.9.1      회귀·분류·앙상블·평가지표
+  [O] torch        2.14.0     딥러닝 (2단계 시계열·이미지 모델)
+== 3) 연산 장치 ==
+  torch가 쓸 장치: mps      <span class="c">← cpu여도 1단계 실습은 전부 가능하다</span>
+== 4) 스모크 테스트 ==
+  정답 계수  : [ 2.  -1.   0.5]
+  학습된 계수: [ 1.991 -1.01   0.505]
+<b>환경 준비 완료</b></pre>
+<div class="tbl">
+<table>
+<thead><tr><th>방법</th><th>준비물</th><th>어떻게</th></tr></thead>
+<tbody>
+<tr class="hi"><td><strong>A. 터미널</strong></td><td>위 가상환경</td><td><code>python3 lab1_numpy_sensor.py</code> 처럼 한 줄씩. 결과 그림·CSV는 <code>out/</code>에 떨어진다</td></tr>
+<tr><td><strong>B. 주피터</strong> (권장)</td><td>+ jupyterlab</td><td><code>jupyter lab notebooks/</code> — 같은 이름의 <code>.ipynb</code>. 셀 단위로 중간 변수를 들여다볼 수 있다</td></tr>
+<tr><td><strong>C. 구글 코랩</strong></td><td>브라우저만</td><td>각 실습의 <em>코랩에서 열기</em>. 코랩에는 numpy·pandas·sklearn·torch가 이미 깔려 있다. 첫 셀이 <code>out/</code> 폴더를 만든다</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="part">1부 · 개념 13개 — 1단계에 나올 수밖에 없는 것</div>
+
+<h2 id="c-data"><span class="num">1.1</span>데이터 — 특징·라벨, 지도·비지도, 표준화, 분할</h2>
+<div class="tbl">
+<table>
+<thead><tr><th>개념</th><th>한 줄 정의</th><th>제조에서 왜 중요한가</th><th>실습</th></tr></thead>
+<tbody>
+<tr><td><strong>특징(feature) / 라벨(label)</strong></td><td>모델에 넣는 입력 열들 / 맞히려는 정답 열</td><td>라벨은 하늘에서 안 떨어진다. 고장 이력을 센서 표에 붙여 만든다</td><td><a href="#lab2">2</a></td></tr>
+<tr><td><strong>지도 / 비지도 학습</strong></td><td>정답이 있는가 없는가</td><td>불량 이력이 없는 설비가 태반이라 비지도 이상탐지를 쓴다</td><td><a href="#lab1">1</a> · <a href="#lab4">4</a></td></tr>
+<tr><td><strong>표준화(정규화)</strong></td><td>열마다 평균 0, 표준편차 1로</td><td>압력 850과 수분율 0.04를 그대로 넣으면 모델이 압력만 본다</td><td><a href="#lab1">1</a> · <a href="#lab3">3</a></td></tr>
+<tr><td><strong>훈련/검증/시험 분할</strong></td><td>학습에 안 쓴 데이터로 채점</td><td>나눠 놓지 않으면 좋아 보이는 착시가 끝까지 안 깨진다</td><td><a href="#lab3">3</a></td></tr>
+</tbody>
+</table>
+</div>
+<div class="terms">
+  <div><b>특징과 라벨은 표 하나다</b>행 = 사례(한 시점, 한 로트), 열 = 특징 여러 개 + 라벨 하나. 지도학습 데이터셋을 "만든다"는 말은 이 표를 만든다는 뜻이고, 그 시간이 모델링 시간보다 길다.</div>
+  <div><b>비지도는 "정상"만 배운다</b>정답이 없으면 정상 구간의 통계를 배우고 거기서 벗어난 정도를 점수로 낸다. 실습 1의 3-시그마 임계값이 가장 단순한 형태다.</div>
+  <div><b>표준화는 모델을 위한 것, 해석은 원래 단위로</b>(x − 평균) / 표준편차. 학습이 끝나면 계수를 원래 단위로 되돌려 놓고 읽는다 (실습 3 (4)).</div>
+  <div><b>분할은 시간순일 때가 많다</b>설비 데이터는 무작위 분할이 아니라 앞 기간으로 학습, 뒤 기간으로 평가한다. 미래 값이 특징에 섞이면(누수) 점수가 헛되게 오른다.</div>
+</div>
+
+<h2 id="c-reg"><span class="num">1.2</span>회귀 — 손실, 경사하강법·학습률, 과적합</h2>
+<div class="tbl">
+<table>
+<thead><tr><th>개념</th><th>한 줄 정의</th><th>제조에서 왜 중요한가</th><th>실습</th></tr></thead>
+<tbody>
+<tr><td><strong>회귀 / 분류</strong></td><td>숫자를 맞히기 / 범주를 맞히기</td><td>치수·수율 예측은 회귀, 양·불 판정은 분류</td><td><a href="#lab3">3</a> · <a href="#lab4">4</a></td></tr>
+<tr><td><strong>손실함수</strong></td><td>틀린 정도를 하나의 숫자로</td><td>회귀는 MSE, 분류는 교차엔트로피. 이 선택이 모델 성격을 정한다</td><td><a href="#lab3">3</a></td></tr>
+<tr><td><strong>경사하강법 · 학습률</strong></td><td>손실이 줄어드는 방향으로 조금씩 이동 / 그 보폭</td><td>학습이 안 되는 원인 1순위가 학습률이다</td><td><a href="#lab3">3</a></td></tr>
+<tr><td><strong>과적합</strong></td><td>훈련 점수는 오르는데 시험 점수가 돌아서는 지점</td><td>데이터가 적은 제조 문제에서 특히 잘 일어난다</td><td><a href="#lab3">3</a></td></tr>
+</tbody>
+</table>
+</div>
+<div class="eq"><span class="tag">회귀의 세 줄 — 신경망도 정확히 이 세 줄이다</span>
+<pre>손실    L(w, b) = (1/n) Σ ( x_i·w + b − y_i )²                 (MSE)
+기울기  dL/dw = (2/n) Xᵀ(Xw + b − y)      dL/db = (2/n) Σ(Xw + b − y)
+갱신    w ← w − lr · dL/dw               b ← b − lr · dL/db</pre>
+<p class="gloss">선형 모델은 정규방정식으로 한 번에 풀린다(실습 3 (2)). 그런데도 경사하강법을 배우는 이유는 신경망에는 닫힌 해가 없기 때문이다. 달라지는 것은 모델의 모양뿐이고 이 세 줄은 같다.</p></div>
+<div class="terms">
+  <div><b>학습률은 "적당히"가 없다</b>작으면 400스텝을 돌아도 제자리, 크면 값이 폭주해 inf가 된다. 원 스케일에서는 되는 학습률의 창이 바늘구멍이고, 표준화하면 넓어진다 (실습 3 (3)(4)).</div>
+  <div><b>과적합은 갈라짐이다</b>모델을 복잡하게(다항 차수 ↑) 만들수록 훈련 오차는 계속 줄지만 시험 오차는 어느 지점에서 돌아선다. 훈련 점수만 보고 좋아하는 실수가 퀴즈의 단골이다 (실습 3 (6)).</div>
+</div>
+
+<h2 id="c-cls"><span class="num">1.3</span>분류와 평가 — 혼동행렬, 불균형</h2>
+<div class="tbl">
+<table>
+<thead><tr><th>개념</th><th>한 줄 정의</th><th>제조에서 왜 중요한가</th><th>실습</th></tr></thead>
+<tbody>
+<tr><td><strong>혼동행렬 · 정밀도 · 재현율</strong></td><td>맞힘/틀림 네 칸과 그로부터 나오는 비율</td><td>미검(FN)과 과검(FP)의 비용이 다르다. 정확도로는 안 보인다</td><td><a href="#lab4">4</a></td></tr>
+<tr><td><strong>불균형 데이터</strong></td><td>찾아야 할 쪽이 드문 상태</td><td>불량률 2%면 "전부 양품"이라 찍어도 정확도 98%</td><td><a href="#lab4">4</a></td></tr>
+</tbody>
+</table>
+</div>
+<div class="eq"><span class="tag">혼동행렬 네 칸에 현장 용어를 붙인다</span>
+<pre>                 예측 불량        예측 양품
+실제 불량   |   TP (잡음)      FN = 미검 (불량을 흘려보냄)
+실제 양품   |   FP = 과검      TN
+
+정밀도 = TP / (TP + FP)   잡은 것 중 진짜 불량 비율 → 과검이 적을수록 높다
+재현율 = TP / (TP + FN)   진짜 불량 중 잡아낸 비율   → 미검이 적을수록 높다</pre>
+<p class="gloss">임계값 0.5는 관습일 뿐이다. 미검 1건 50만원, 과검 1건 2만원이면 총비용이 최소인 임계값은 0.03까지 내려간다 (실습 4 (5)). 현업과 합의할 것은 모델이 아니라 이 비용표다.</p></div>
+
+<h2 id="c-dl"><span class="num">1.4</span>신경망 — 텐서·autograd, 에폭·배치, 은닉층·활성함수</h2>
+<div class="tbl">
+<table>
+<thead><tr><th>개념</th><th>한 줄 정의</th><th>제조에서 왜 중요한가</th><th>실습</th></tr></thead>
+<tbody>
+<tr><td><strong>텐서 · autograd</strong></td><td>배열 + 미분 기록 / 미분 자동 계산</td><td>손으로 미분할 수 없는 모델을 학습시키는 장치</td><td><a href="#lab5">5</a></td></tr>
+<tr><td><strong>에폭 · 배치</strong></td><td>데이터 한 바퀴 / 한 번에 처리하는 묶음</td><td>둘을 헷갈리면 학습 시간 계산이 어긋난다</td><td><a href="#lab5">5</a></td></tr>
+<tr><td><strong>은닉층 · 활성함수</strong></td><td>층을 쌓고 사이에 비선형을 끼운다</td><td>"너무 낮아도 불량, 너무 높아도 불량"은 직선으로 못 가른다</td><td><a href="#lab5">5</a></td></tr>
+</tbody>
+</table>
+</div>
+<div class="eq"><span class="tag">PyTorch 학습 루프 — 부트캠프 내내 이 다섯 줄만 반복된다</span>
+<pre>opt.zero_grad()          # 지난 기울기를 지운다 (빼먹으면 누적된다)
+pred = model(x)          # 순전파
+loss = lossf(pred, y)    # 손실
+loss.backward()          # 역전파 = 기울기 계산
+opt.step()               # 파라미터 갱신</pre>
+<p class="gloss"><code>backward()</code>가 내놓는 기울기는 실습 3에서 손으로 적은 식과 같은 값이다 (실습 5 (2), 최대 차이 1e-6). 강의 코드가 빨라지면 모르는 줄이 (a) 데이터 준비 (b) 모델 정의 (c) 이 다섯 줄 중 어디인지부터 분류한다.</p></div>
+
+<div class="part">2부 · 실습 5종 — 합성 데이터, 다운로드 없음</div>
+
+<div class="lab-head" id="lab1"><span class="n">실습 1</span><div><h3>NumPy — 센서 3채널, 이동통계로 베어링 고장 잡기</h3><div class="ref">개념 <a href="#c-data">1.1</a> — shape · 브로드캐스팅 · axis · 불리언 마스킹 · 45분 · <code>out/lab1_sensor.png</code></div></div></div>
+<pre class="code">python3 lab1_numpy_sensor.py</pre>
+<div class="links">
+  <a class="ext" href="https://github.com/drum-grammer/mfg-ai-bootcamp/blob/main/labs/lab1_numpy_sensor.py">코드 (GitHub)</a>
+  <a class="ext" href="https://github.com/drum-grammer/mfg-ai-bootcamp/blob/main/labs/notebooks/lab1_numpy_sensor.ipynb">노트북</a>
+  <a class="ext" href="https://colab.research.google.com/github/drum-grammer/mfg-ai-bootcamp/blob/main/labs/notebooks/lab1_numpy_sensor.ipynb">코랩에서 열기</a>
+</div>
+<p class="col"><strong>상황</strong>: 1초에 10번 샘플링하는 설비 센서 3채널(진동·온도·전류) 10분치. 7분 지점부터 30초간 베어링 이상 — 진동이 커지고 전류가 따라 오른다.
+C 펌웨어에서 for 루프로 하던 일(영점 빼기, 이동평균, 임계값 넘는 구간 찾기)이 NumPy에서는 전부 한 줄이 된다.</p>
+<div class="tbl">
+<table>
+<thead><tr><th>구획</th><th>실제 출력 (2026-09-13)</th><th>읽는 법</th></tr></thead>
+<tbody>
+<tr><td>(1) shape</td><td><code>X.shape = (6000, 3)</code> — 행 = 시점, 열 = 채널</td><td>모든 실습에서 shape부터 본다</td></tr>
+<tr><td>(2) 벡터화</td><td>같은 RMS: for 루프 0.44 ms vs NumPy 0.02 ms, <strong>18배</strong></td><td>데이터가 100배 커지면 이 차이가 대기 시간이 된다</td></tr>
+<tr><td>(3) 브로드캐스팅</td><td><code>(6000,3) − (3,)</code>이 계산된다. 표준화 후 평균 0, 표준편차 1</td><td>채널별 보정을 한 번에</td></tr>
+<tr><td>(4) 슬라이딩 윈도우</td><td>5초 창 → <code>(5951, 50)</code>, 원본 메모리 재사용 True</td><td>이동평균·이동표준편차 = 2단계 시계열 특징의 원형</td></tr>
+<tr class="hi"><td>(5) 3-시그마 경보</td><td>정상 구간 이동표준편차 평균 0.3180, 임계값 <strong>0.3785</strong>. 경보 구간 14개 — 고장 구간 안 <strong>13개</strong> / 오경보 <strong>1개</strong></td><td>검출이 늦고(창을 채울 때까지), 오경보가 섞인다(정상도 가끔 넘는다). "3초 이상 지속" 같은 규칙이 늘 따라붙는다</td></tr>
+<tr><td>(6) axis</td><td><code>mean(axis=0) → (3,)</code> 채널별 / <code>mean(axis=1) → (6000,)</code> 시점별</td><td>axis는 "없어지는 축"이다</td></tr>
+</tbody>
+</table>
+</div>
+<figure style="margin:20px 0 0;max-width:860px"><img src="img/lab1_sensor.png" alt="실습 1 결과: 진동 원신호와 5초 이동평균, 이동표준편차와 3-시그마 임계값, 경보 구간이 420~450초 고장 구간(회색)과 겹친다" style="border:1px solid var(--line);border-radius:6px"><figcaption style="font-family:var(--f-ui);font-size:12.5px;color:var(--muted);margin-top:6px">위: 원신호(회색)와 5초 이동평균. 가운데: 이동표준편차와 3-시그마 임계값(빨간 점선). 아래: 경보(빨강)가 주입한 고장 구간 420~450초(회색 띠)와 겹친다.</figcaption></figure>
+<div class="box"><span class="h">해 볼 것</span>창 길이 <code>W</code>를 5초에서 1초·20초로 바꿔 "지연 vs 안정성"이 어떻게 움직이는지. 3-시그마를 2-시그마로 낮추면 오경보가 몇 개로 느는지. 고장 구간을 30초에서 5초로 줄이면 5초 창이 잡아내는지.</div>
+
+<div class="lab-head" id="lab2"><span class="n">실습 2</span><div><h3>Pandas — 설비 로그를 "모델에 넣을 표"로</h3><div class="ref">개념 <a href="#c-data">1.1</a> — 결측 두 종류 · resample · merge로 라벨 · rolling · 60분 · <code>out/dataset_hourly.csv</code></div></div></div>
+<pre class="code">python3 lab2_pandas_equipment_log.py</pre>
+<div class="links">
+  <a class="ext" href="https://github.com/drum-grammer/mfg-ai-bootcamp/blob/main/labs/lab2_pandas_equipment_log.py">코드 (GitHub)</a>
+  <a class="ext" href="https://github.com/drum-grammer/mfg-ai-bootcamp/blob/main/labs/notebooks/lab2_pandas_equipment_log.ipynb">노트북</a>
+  <a class="ext" href="https://colab.research.google.com/github/drum-grammer/mfg-ai-bootcamp/blob/main/labs/notebooks/lab2_pandas_equipment_log.ipynb">코랩에서 열기</a>
+</div>
+<p class="col"><strong>왜 이 실습이 제일 중요한가</strong>: 강의는 모델에 시간을 쓰지만, 실제 과제에서 시간을 먹는 곳은 여기다. 설비 3대 × 7일 × 1분 간격의 지저분한 CSV(통신 끊김, 센서 오류 코드 −999, 설비마다 다른 기록 시작)와 고장 이력 표를 붙여 <strong>라벨이 달린 표</strong> 하나를 만든다.</p>
+<div class="tbl">
+<table>
+<thead><tr><th>단계</th><th>실제 출력 (2026-09-13)</th><th>읽는 법</th></tr></thead>
+<tbody>
+<tr><td>(1) 읽자마자 describe()</td><td><code>temp</code>의 min이 <strong>−999</strong>. 30,240행</td><td>센서 고장 코드가 숫자로 섞여 들어왔다. 평균을 그대로 믿으면 안 된다</td></tr>
+<tr class="hi"><td>(2) 결측 두 종류</td><td>temp 224 / vib 165 / current 165개. <code>limit=5</code>(5분까지만) 메운 뒤 남은 결측 <strong>315개</strong></td><td>통신 끊김(수십 분)은 지어내지 않고 남긴다. 오류 코드(한두 점)는 앞뒤로 메운다. 설비별 groupby 없이 ffill하면 다른 설비 값이 넘어온다</td></tr>
+<tr><td>(3) resample 1분 → 1시간</td><td>30,240행 → <strong>504행</strong>. 평균·최댓값·표준편차·개수</td><td>집계 함수 선택이 곧 특징 설계다: 평균은 추세, 최댓값은 피크, 표준편차는 흔들림</td></tr>
+<tr class="hi"><td>(4) merge로 라벨</td><td>"앞으로 6시간 안에 고장?" 라벨 분포 {0: 486, 1: 18}, 양성 <strong>3.57%</strong></td><td>지도학습의 y가 여기서 생긴다. 고장 이후 구간을 넣으면 누수(leakage)</td></tr>
+<tr><td>(5) rolling 특징</td><td>label=1 구간 vib 기울기 <strong>+0.0148</strong> vs label=0 −0.0006, temp 기울기 +0.6332 vs −0.0302</td><td>전조는 절댓값보다 기울기에서 먼저 보인다</td></tr>
+<tr><td>(6) 완성된 표</td><td><strong>498행 × 특징 9개 + 라벨 1개</strong></td><td>여기까지가 "X와 y를 만든다"의 실제 내용. 실습 3~5가 이 표 모양을 받는다</td></tr>
+</tbody>
+<caption>read_csv → describe로 이상값 → 결측 종류 나누기 → resample → merge로 라벨 → rolling 특징. 이 6단계가 2단계 제조 응용 과제에서 매번 반복된다.</caption>
+</table>
+</div>
+<div class="box"><span class="h">해 볼 것</span>라벨 창을 6시간에서 12시간·2시간으로 바꾸면 양성 비율과 기울기 차이가 어떻게 변하는지. <code>limit=5</code>를 60으로 올려 통신 끊김까지 메우면 라벨 1 구간의 특징이 어떻게 흐려지는지. 설비별 groupby를 빼고 ffill하면 무슨 일이 생기는지.</div>
+
+<div class="lab-head" id="lab3"><span class="n">실습 3</span><div><h3>회귀를 손으로 — 사출성형 공정 → 제품 치수</h3><div class="ref">개념 <a href="#c-reg">1.2</a> — 손실 · 정규방정식 · 경사하강법 · 학습률 · 스케일링 · 과적합 · 60분 · <code>out/lab3_regression.png</code></div></div></div>
+<pre class="code">python3 lab3_regression_from_scratch.py</pre>
+<div class="links">
+  <a class="ext" href="https://github.com/drum-grammer/mfg-ai-bootcamp/blob/main/labs/lab3_regression_from_scratch.py">코드 (GitHub)</a>
+  <a class="ext" href="https://github.com/drum-grammer/mfg-ai-bootcamp/blob/main/labs/notebooks/lab3_regression_from_scratch.ipynb">노트북</a>
+  <a class="ext" href="https://colab.research.google.com/github/drum-grammer/mfg-ai-bootcamp/blob/main/labs/notebooks/lab3_regression_from_scratch.ipynb">코랩에서 열기</a>
+</div>
+<p class="col"><strong>상황</strong>: 사출압력(~850 bar)·금형온도(~45 ℃)·냉각시간(~12 s)·원료 수분율(~0.04 %)로 완성품 치수 편차(mm)를 예측한다. 단위가 제각각이라 크기 차이가 2만 배 — 그것이 이 실습의 핵심이다.</p>
+<div class="tbl">
+<table>
+<thead><tr><th>구획</th><th>실제 출력 (2026-09-13)</th><th>읽는 법</th></tr></thead>
+<tbody>
+<tr><td>(2) 정규방정식</td><td>계수 [0.0020, −0.0146, −0.0394, 2.8826], MSE <strong>0.000361</strong> (잡음 분산 0.0004)</td><td>선형 모델은 한 번에 풀린다. 더 줄일 수 없는 바닥</td></tr>
+<tr class="hi"><td>(3) 원 스케일, 학습률만</td><td>lr=1e-9 → 0.340 (느림) · lr=1e-7 → 0.013 (느림) · lr=1e-5 → <strong>inf (발산)</strong></td><td>되는 학습률의 창이 바늘구멍이다</td></tr>
+<tr class="hi"><td>(4) 표준화 뒤</td><td>lr=1e-3 → 0.213 · lr=1e-2 → <strong>0.000361</strong> · lr=1e-1 → 0.000361</td><td>같은 400스텝에 정규방정식과 같은 답. 계수를 원 단위로 되돌리면 (2)와 일치</td></tr>
+<tr><td>(5) sklearn 대조</td><td>최대 차이 <strong>4.4e-16</strong></td><td>라이브러리가 하는 일을 이제 안다</td></tr>
+<tr><td>(6) 과적합</td><td>차수 1/2/3/5/8/11 → test RMSE 0.0196 / <strong>0.0195</strong> / 0.0196 / 0.0202 / 0.0205 / <strong>0.0981</strong>. train은 0.0188 → 0.0178로 계속 감소</td><td>test 기준 최적은 2차. 이 갈라짐이 과적합</td></tr>
+</tbody>
+</table>
+</div>
+<figure style="margin:20px 0 0;max-width:860px"><img src="img/lab3_regression.png" alt="실습 3 결과: 표준화 후 손실 곡선, 예측 대 실제 산점도, 다항 차수에 따른 train/test RMSE 갈라짐" style="border:1px solid var(--line);border-radius:6px"><figcaption style="font-family:var(--f-ui);font-size:12.5px;color:var(--muted);margin-top:6px">왼쪽: 표준화 후 lr=0.1 손실 곡선(로그). 가운데: 예측 vs 실제. 오른쪽: 차수를 올리면 train RMSE는 내려가고 test RMSE는 11차에서 튄다.</figcaption></figure>
+<div class="box"><span class="h">해 볼 것</span>표준화 없이 lr=1e-6, 1e-8을 넣어 창이 얼마나 좁은지 직접 찾아본다. 데이터 N을 600에서 60으로 줄이면 과적합이 몇 차부터 시작하는지. 잡음을 0.02에서 0.2로 키우면 MSE 바닥이 어디로 가는지.</div>
+
+<div class="lab-head" id="lab4"><span class="n">실습 4</span><div><h3>불량 판정은 정확도로 평가하지 않는다 — 불량률 2%</h3><div class="ref">개념 <a href="#c-cls">1.3</a> — 로지스틱 회귀 · 혼동행렬 · 비용 기반 임계값 · class_weight · PR · 45분 · <code>out/lab4_classification.png</code></div></div></div>
+<pre class="code">python3 lab4_classification_imbalanced.py</pre>
+<div class="links">
+  <a class="ext" href="https://github.com/drum-grammer/mfg-ai-bootcamp/blob/main/labs/lab4_classification_imbalanced.py">코드 (GitHub)</a>
+  <a class="ext" href="https://github.com/drum-grammer/mfg-ai-bootcamp/blob/main/labs/notebooks/lab4_classification_imbalanced.ipynb">노트북</a>
+  <a class="ext" href="https://colab.research.google.com/github/drum-grammer/mfg-ai-bootcamp/blob/main/labs/notebooks/lab4_classification_imbalanced.ipynb">코랩에서 열기</a>
+</div>
+<p class="col"><strong>상황</strong>: 공정 파라미터 5개로 로트의 불량을 판정한다. 6,000건 중 불량 136건(2.27%). 품질관리·이상탐지·예지보전은 전부 이 모양이다 — 찾아야 할 것이 드물다.</p>
+<div class="tbl">
+<table>
+<thead><tr><th>구획</th><th>실제 출력 (2026-09-13)</th><th>읽는 법</th></tr></thead>
+<tbody>
+<tr><td>(2) 로지스틱 회귀 직접 구현</td><td>계수: 수분율 +1.446, 사이클편차 +1.054, 금형온도 −0.752 … sklearn과 소수 셋째 자리까지 일치</td><td>표준화한 계수라 크기 비교가 그대로 영향력 비교</td></tr>
+<tr class="hi"><td>(3) 정확도의 함정</td><td>전부 "양품" 모델 <strong>98.00%</strong> (검출 0건) vs 학습한 모델 <strong>98.06%</strong> (검출 3건)</td><td>정확도로는 둘을 구분할 수 없다. 보고서에 쓰면 안 된다</td></tr>
+<tr><td>(4) 혼동행렬 @0.5</td><td>TP 3 · FN <strong>33</strong> · FP 2 · TN 1762. 정밀도 0.600, 재현율 <strong>0.083</strong>, F1 0.146</td><td>미검(FN) 33건. 잡은 것은 정확하지만 거의 못 잡는다</td></tr>
+<tr class="hi"><td>(5) 비용으로 임계값</td><td>미검 50만원·과검 2만원: 임계값 0.50 → 비용 <strong>1,654만원</strong> / 최적 <strong>0.03</strong> → <strong>900만원</strong> (재현율 0.833, 정밀도 0.091)</td><td>미검이 비쌀수록 임계값을 낮춰 많이 잡는다. 0.5는 어디에도 근거가 없다</td></tr>
+<tr><td>(6) class_weight</td><td>가중치 1/5/20/50 → 재현율 0.083 / 0.361 / 0.583 / <strong>0.861</strong>, 정밀도 0.600 → 0.073</td><td>임계값 조정과 결국 같은 손잡이</td></tr>
+<tr><td>(7) 요약 지표</td><td>ROC-AUC <strong>0.914</strong> vs PR-AUC <strong>0.265</strong> (무작위 기준선 0.020의 13배)</td><td>불균형에서 ROC는 후하게 나온다. PR을 같이 본다</td></tr>
+</tbody>
+</table>
+</div>
+<figure style="margin:20px 0 0;max-width:860px"><img src="img/lab4_classification.png" alt="실습 4 결과: 정밀도-재현율 곡선, 임계값에 따른 기대 비용, 임계값 0.5의 혼동행렬" style="border:1px solid var(--line);border-radius:6px"><figcaption style="font-family:var(--f-ui);font-size:12.5px;color:var(--muted);margin-top:6px">왼쪽: PR 곡선과 무작위 기준선. 가운데: 임계값에 따른 기대 비용(만원), 최소점 0.03. 오른쪽: 임계값 0.5의 혼동행렬.</figcaption></figure>
+<div class="box"><span class="h">해 볼 것</span><code>COST_FN</code>을 50만원에서 5만원으로 낮추면 최적 임계값이 어디로 가는지(과검이 상대적으로 비싸진다). 불량률을 2%에서 20%로 올리면 ROC-AUC와 PR-AUC의 간격이 어떻게 줄어드는지. class_weight 5와 임계값 0.15 중 어느 쪽이 같은 재현율에서 정밀도가 높은지.</div>
+
+<div class="lab-head" id="lab5"><span class="n">실습 5</span><div><h3>PyTorch — 실습 3·4에서 손으로 하던 것을 그대로 옮긴다</h3><div class="ref">개념 <a href="#c-dl">1.4</a> — 텐서 · autograd · 다섯 줄 관용구 · DataLoader · 선형 vs MLP · 45분 · <code>out/lab5_boundary.png</code></div></div></div>
+<pre class="code">python3 lab5_pytorch_basics.py</pre>
+<div class="links">
+  <a class="ext" href="https://github.com/drum-grammer/mfg-ai-bootcamp/blob/main/labs/lab5_pytorch_basics.py">코드 (GitHub)</a>
+  <a class="ext" href="https://github.com/drum-grammer/mfg-ai-bootcamp/blob/main/labs/notebooks/lab5_pytorch_basics.ipynb">노트북</a>
+  <a class="ext" href="https://colab.research.google.com/github/drum-grammer/mfg-ai-bootcamp/blob/main/labs/notebooks/lab5_pytorch_basics.ipynb">코랩에서 열기</a>
+</div>
+<p class="col"><strong>왜 PyTorch인가</strong>: 실습 3에서 미분을 손으로 적었다. 모델이 조금만 복잡해져도 그 미분을 손으로 못 적는다. PyTorch는 "계산을 기록해 두었다가 미분을 대신 해 주는" 도구다. 그게 전부다.</p>
+<div class="tbl">
+<table>
+<thead><tr><th>구획</th><th>실제 출력 (2026-09-13)</th><th>읽는 법</th></tr></thead>
+<tbody>
+<tr><td>(1) 텐서</td><td>ndarray (2,3) float64 ↔ tensor (2,3) float32. <code>a.mean(axis=0)</code> = <code>t.mean(dim=0)</code></td><td>주의 둘: NumPy는 axis, torch는 dim / 기본 dtype이 다르다</td></tr>
+<tr class="hi"><td>(2) autograd vs 손계산</td><td>dL/dw 손계산 [−3.24631, 4.28557, −1.21452] = autograd, 최대 차이 <strong>1.19e-6</strong></td><td>같은 것을 자동으로 해 줄 뿐이다</td></tr>
+<tr><td>(3) 다섯 줄 관용구</td><td>step 0 loss 10.17 → step 99 <strong>0.00279</strong>. 학습된 계수 [1.5, −2.0, 0.697], 정답 [1.5, −2.0, 0.7]</td><td>이 다섯 줄이 부트캠프 내내 반복된다</td></tr>
+<tr><td>(4) DataLoader</td><td>배치 32 × 30에폭 → 같은 답. 한 에폭 = <strong>7번</strong>의 갱신 (200건 / 32)</td><td>미니배치는 메모리를 위한 것이지 정확도를 위한 것이 아니다. 에폭 수 ≠ 갱신 횟수</td></tr>
+<tr class="hi"><td>(5) 공정 창 문제</td><td>선형 모델 <strong>69.1%</strong> vs 은닉층 2개 MLP <strong>96.8%</strong> (오라벨 3% 포함)</td><td>"너무 낮아도 불량, 너무 높아도 불량"은 직선 하나로 못 가른다. 딥러닝이 제조에서 쓰이는 이유의 8할</td></tr>
+<tr><td>(6) 저장·불러오기</td><td>state_dict 4.3 KB, 다시 불러와 같은 출력 True</td><td>저장되는 것은 가중치뿐. 모델 구조 코드는 따로 있어야 한다 — 미니 프로젝트 제출 때 자주 놓친다</td></tr>
+</tbody>
+</table>
+</div>
+<figure style="margin:20px 0 0;max-width:860px"><img src="img/lab5_boundary.png" alt="실습 5 결과: 금형온도-수분율 평면에서 선형 모델은 직선 하나로 가르고 MLP는 공정 창을 사각형으로 둘러싼다" style="border:1px solid var(--line);border-radius:6px"><figcaption style="font-family:var(--f-ui);font-size:12.5px;color:var(--muted);margin-top:6px">왼쪽: 선형 모델의 결정 경계(직선). 오른쪽: MLP가 공정 창(금형온도 40~52 ℃, 수분율 &lt; 0.05)을 둘러싼다.</figcaption></figure>
+<div class="box"><span class="h">해 볼 것</span><code>opt.zero_grad()</code> 줄을 지우고 (3)을 돌려 loss가 어떻게 되는지. 은닉층 폭을 16에서 2로 줄이면 공정 창을 둘러싸는지. 오라벨 비율 3%를 15%로 올리면 MLP 정확도가 어디까지 내려가는지 — 100%가 나오면 오히려 의심할 것.</div>
+
+<h2 id="labmap"><span class="num">2.6</span>실습 ↔ 개념 지도</h2>
+<div class="tbl">
+<table>
+<thead><tr><th>실습</th><th>핵심</th><th>끝나면 알게 되는 것</th><th>2단계에서</th></tr></thead>
+<tbody>
+<tr><td>0 <code>setup_check.py</code></td><td>환경</td><td>파이썬 버전·패키지·연산 장치, 작은 학습 루프가 실제로 도는지</td><td>—</td></tr>
+<tr><td>1 <code>lab1_numpy_sensor.py</code></td><td>NumPy</td><td>shape·브로드캐스팅·axis·마스킹. 이동통계로 고장을 잡고 오경보가 왜 섞이는지</td><td>시계열 창 특징, 이상탐지 기준선</td></tr>
+<tr><td>2 <code>lab2_pandas_equipment_log.py</code></td><td>Pandas</td><td>지저분한 CSV → 모델에 넣을 표. 결측 두 종류, 리샘플링, merge로 라벨, rolling</td><td>예지보전 데이터셋 만들기 6단계</td></tr>
+<tr><td>3 <code>lab3_regression_from_scratch.py</code></td><td>회귀</td><td>손실·기울기·갱신을 손으로. 학습률을 터뜨려 보고, 스케일링을 실측하고, 과적합을 만든다</td><td>잔여수명 회귀, 모든 신경망 학습의 뼈대</td></tr>
+<tr><td>4 <code>lab4_classification_imbalanced.py</code></td><td>분류</td><td>정확도 98%짜리 바보 모델. 혼동행렬·정밀도·재현율, 비용표로 임계값, class_weight, PR</td><td>품질관리·이상탐지 평가 전부</td></tr>
+<tr><td>5 <code>lab5_pytorch_basics.py</code></td><td>PyTorch</td><td>backward()가 손계산과 같음을 확인. 다섯 줄 관용구, DataLoader, 선형 vs MLP, state_dict</td><td>CNN·오토인코더·시계열 모델 — 모델 정의만 바뀐다</td></tr>
+</tbody>
+<caption><code>.py</code>가 정본이고 노트북은 <code>make_notebooks.py</code>가 만든 산출물이다. 실행하면 <code>out/</code>에 그림과 CSV가 생긴다.</caption>
+</table>
+</div>
+
+<div class="part">3부 · 점검</div>
+
+<h2 id="quiz"><span class="num">3.1</span>자가 점검 10문항</h2>
+<p class="col">실습을 다 돌린 뒤 답할 수 있어야 하는 것. 막히는 번호가 곧 1주차에 물어볼 질문이다.</p>
+<ol>
+  <li><code>X.mean(axis=0)</code>과 <code>X.mean(axis=1)</code>은 각각 무엇을 남기는가</li>
+  <li>통신 끊김으로 40분 비어 있는 구간과, 센서 오류 코드로 한 점 비어 있는 구간을 왜 다르게 처리하는가</li>
+  <li>표준화를 하면 학습률의 허용 범위가 왜 넓어지는가</li>
+  <li>정규방정식으로 한 번에 풀 수 있는데 왜 경사하강법을 배우는가</li>
+  <li>다항 차수를 올릴 때 훈련 RMSE와 시험 RMSE는 각각 어떻게 움직이는가</li>
+  <li>불량률 2%에서 정확도 98%를 보고했을 때 무엇을 숨기고 있는가</li>
+  <li>미검 비용이 과검 비용의 25배라면 임계값을 0.5보다 올려야 하나 내려야 하나</li>
+  <li><code>opt.zero_grad()</code>를 빼먹으면 무슨 일이 생기는가</li>
+  <li>에폭 30, 배치 32, 데이터 200건이면 파라미터는 몇 번 갱신되는가</li>
+  <li>금형온도가 너무 낮아도 높아도 불량일 때, 로지스틱 회귀 하나로 왜 안 되는가</li>
+</ol>
+<details class="quiz"><summary></summary>
+<ol>
+  <li><code>axis=0</code>은 시간축(행)을 없애 <strong>채널별 평균 (3,)</strong>, <code>axis=1</code>은 채널축(열)을 없애 <strong>시점별 평균 (6000,)</strong>. axis는 "없어지는 축"이다. (실습 1 (6))</li>
+  <li>긴 끊김은 값을 지어내면 40분치 가짜 데이터가 된다 — 구간째 빼거나 "결측이었음" 플래그를 남긴다. 한두 점의 오류 코드는 앞뒤로 보간하는 것이 합리적이다(<code>interpolate(limit=5)</code>). 어느 쪽이든 설비별로 따로 처리한다. (실습 2 (2))</li>
+  <li>원 스케일에서는 수분율(0.04) 방향은 큰 보폭이, 압력(850) 방향은 작은 보폭이 필요해 하나의 학습률로 둘을 만족시키기 어렵다(1e-5는 발산, 1e-7은 느림). 표준화하면 모든 방향의 크기가 같아져 1e-2~1e-1이 다 된다. (실습 3 (3)(4))</li>
+  <li>정규방정식은 <strong>선형 모델에만</strong> 있다. 신경망에는 닫힌 해가 없어서 손실 → 기울기 → 갱신의 반복밖에 쓸 수 없다. (실습 3 (2))</li>
+  <li>훈련 RMSE는 계속 내려간다(0.0188 → 0.0178). 시험 RMSE는 2차에서 최소(0.0195)였다가 11차에서 0.098로 튄다. 이 갈라짐이 과적합이다. (실습 3 (6))</li>
+  <li>재현율과 혼동행렬. 전부 "양품"이라 찍는 모델도 98%이고 불량 검출은 0건이다 — 정확도는 미검(FN) 33건을 숨긴다. (실습 4 (3)(4))</li>
+  <li><strong>내려야 한다.</strong> 미검이 비쌀수록 많이 잡아야 하므로 임계값을 낮춘다. 실습 4에서는 0.5 → 0.03으로 내려 비용이 1,654만원에서 900만원으로 줄었다. (실습 4 (5))</li>
+  <li>기울기가 지워지지 않고 <strong>누적</strong>된다. 매 스텝 이전 기울기가 더해져 갱신이 점점 커지고 학습이 틀어진다. (실습 5 (3))</li>
+  <li>한 에폭 = ⌈200 / 32⌉ = 7번 갱신, 30에폭이면 <strong>210번</strong>. 에폭 수와 갱신 횟수를 헷갈리지 말 것. (실습 5 (4))</li>
+  <li>로지스틱 회귀의 결정 경계는 <strong>직선(초평면) 하나</strong>다. "낮아도 불량, 높아도 불량"은 양쪽을 가르는 경계 둘이 필요해서 직선 하나로는 69.1%에 그친다. 은닉층을 끼우면(MLP) 공정 창을 둘러싸 96.8%. (실습 5 (5))</li>
+</ol>
+</details>
+
+<h2 id="firstday"><span class="num">3.2</span>개강 당일 체크 · 첫 회차에 확인할 것</h2>
+<ul class="checks">
+  <li><label><input type="checkbox" id="d-laptop"><span>노트북 + 충전기, 설치 완료 상태 (setup_check 통과)</span></label></li>
+  <li><label><input type="checkbox" id="d-move"><span>12:00 이전 출발 — 교통·주차는 노션 안내 참조 (주차 매우 협소, 대중교통 권장)</span></label></li>
+  <li><label><input type="checkbox" id="d-sign"><span>출석부 자필 서명 확인</span></label></li>
+  <li><label><input type="checkbox" id="d-q1"><span>확인 ① 회차별 과목표 공개 시점</span></label></li>
+  <li><label><input type="checkbox" id="d-q2"><span>확인 ② 퀴즈 형식·빈도·배점</span></label></li>
+  <li><label><input type="checkbox" id="d-q3"><span>확인 ③ 미니 프로젝트 규칙 (팀/데이터/평가)</span></label></li>
+  <li><label><input type="checkbox" id="d-q4"><span>확인 ④ 실습 환경 (로컬 vs 코랩, 파이썬 버전)</span></label></li>
+  <li><label><input type="checkbox" id="d-note"><span>강의 후 30분 안에 회차 노트 작성 (<a href="index.html#note">양식</a>)</span></label></li>
+</ul>
+
+<h2 id="notes"><span class="num">3.3</span>회차 노트 (개강 후)</h2>
+<p class="col">회차 1~8의 노트가 쌓이면 여기에 회차별로 붙는다 — 핵심 개념 3~5개, 실습 기록, 퀴즈 대비, 질문. 강의에서 다룬 개념이 위 표에 없으면 표에 줄을 더한다.</p>
+<div class="box"><span class="h">2026-09-13 현재</span>아직 없음. 1회차는 09-15(화) 13:00.</div>
+
+<div class="nextprev">
+  <a href="index.html"><small>메인 문서</small>제조AI 부트캠프 스터디</a>
+  <a href="stage-2-applied.html"><small>다음 단계</small>2단계 제조 응용 AI →</a>
+</div>
+
+<footer>
+  실습 결과 수치는 2026-09-13에 스크립트를 실제로 돌려 나온 값이다(macOS arm64, Python 3.12.13, numpy 2.5.3, torch 2.14.0). 난수 시드가 고정돼 있어 같은 값이 나오지만 시간 측정과 MPS/CPU 차이는 환경에 따라 다를 수 있다.
+  개념 설명은 일반적인 머신러닝 교재 수준이며 강의 내용과 다를 수 있다 — 강의가 시작되면 강의를 우선한다. 갱신 2026-09-13.
+</footer>
+</main>
+</div>
+
+<script>
+(function () {
+  var key = 'mfg-ai-bootcamp:' + location.pathname;
+  var boxes = document.querySelectorAll('.checks input[type=checkbox]');
+  var saved = {};
+  try { saved = JSON.parse(localStorage.getItem(key) || '{}') || {}; } catch (e) { saved = {}; }
+  Array.prototype.forEach.call(boxes, function (b) {
+    if (saved[b.id]) b.checked = true;
+    b.addEventListener('change', function () {
+      saved[b.id] = b.checked;
+      try { localStorage.setItem(key, JSON.stringify(saved)); } catch (e) {}
+    });
+  });
+})();
+</script>
+</body>
+</html>
